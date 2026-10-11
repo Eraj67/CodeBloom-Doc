@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ doc.title }} | CodeBloom</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <img src="{% static 'images/logo.png' %}" alt="CodeBloom Logo" class="logo">
+        <div class="logo-name">
+            <span class="code">Code</span><span class="bloom">Bloom</span>
+        </div>
+    </header>
+
+    <div class="layout">
+
+        <aside class="side-bar">
+            {% for category in categories %}
+                <h3>{{ category.name|upper }}</h3>
+                <ul>
+                    {% for d in category.document_set.all %}
+                        <li><a href="{% url 'doc_detail' d.pk %}">{{ d.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </aside>
+
+        <main>
+            <div class="doc-header">
+                <span>{{ doc.category.name|upper }}</span>
+                <h1>{{ doc.title }}</h1>
+                <p>{{ doc.summary }}</p>
+            </div>
+
+            <section class="doc-content">
+                <h2 class="eyebrow">What is {{ doc.title }}?</h2>
+                {{ doc.content|linebreaks }}
+
+                <h2 class="eyebrow">Syntax</h2>
+                <pre><code>{{ doc.syntax }}</code></pre>
+
+                <h2 class="eyebrow">Key Points</h2>
+                {{ doc.key|linebreaks }}
+
+                <h2 class="eyebrow">Example</h2>
+                <pre><code>{{ doc.example }}</code></pre>
+
+                <h2 class="eyebrow">Common Mistakes</h2>
+                <p>{{ doc.mistake|linebreaks }}</p>
+            </section>
+        </main>
+
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
