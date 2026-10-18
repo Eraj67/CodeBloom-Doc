@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ doc.title }} | CodeBloom</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/prism.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -40,13 +44,23 @@
                 {{ doc.content|linebreaks }}
 
                 <h2 class="eyebrow">Syntax</h2>
-                <pre><code>{{ doc.syntax }}</code></pre>
+                <div class="code-box">
+                <pre><code class="language-{{ doc.syntax_language|lower }}">{{ doc.syntax }}</code></pre>
+                </div>
 
                 <h2 class="eyebrow">Key Points</h2>
                 {{ doc.key|linebreaks }}
 
                 <h2 class="eyebrow">Example</h2>
-                <pre><code>{{ doc.example }}</code></pre>
+                {% for example in doc.examples.all %}
+                    <h3>{{ example.title }}</h3>
+                    <p>Language: {{ example.language }}</p>
+                    <div class="code-box">
+                    <pre><code class="language-{{ example.language|lower }}">{{ example.code }}</code></pre>
+                    </div>
+                  {% empty %}
+                    <p>No examples added yet.</p>
+                {% endfor %}
 
                 <h2 class="eyebrow">Common Mistakes</h2>
                 <p>{{ doc.mistake|linebreaks }}</p>
@@ -56,5 +70,6 @@
     </div>
 
     <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/prism.js' %}"></script>
 </body>
 </html>
